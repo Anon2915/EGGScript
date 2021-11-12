@@ -1,0 +1,91 @@
+--Settings
+Grind = false
+Random = math.random(-10000,10000)
+GrindKeybind = Enum.KeyCode.RightControl
+HideGuiKeybinds = {Enum.KeyCode.P, Enum.KeyCode.LeftControl}
+TPKeybinds = {Enum.KeyCode.M, Enum.KeyCode.LeftControl}
+ToBlockKeybind = {Enum.KeyCode.R, Enum.KeyCode.LeftControl}
+BlockOrMap = true --True means block False means map
+
+--StartMessage
+game.StarterGui:SetCore("ChatMakeSystemMessage", {
+Text = "Type /e TargetAll to Target All Players\nType /e UnTargetAll to UnTarget All Players\nCBring Doesn't Work With Some Abilities\nCtrl+P to Hide Gui\nRightCtrl To Toggle Grind\nCtrl+M To TP To Player In Name Bar\nCtrl+R To TP To Map Or Block";
+Color = Color3.fromRGB(255, 215, 53);
+Font = Enum.Font.SourceSansBold;
+FontSize = Enum.FontSize.Size96;
+})
+
+--CBringScript
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Anon2915/EGG-Elemental-Grind-Game-Bring-Players-Script/main/The%20Script', true))()
+
+--Block
+if game.Workspace:FindFirstChild('Platform') then game.Workspace.Platform:Remove() end
+local Brick = Instance.new("Part", Workspace)
+Brick.Name = "Platform"
+Brick.Anchored = true
+Brick.CFrame = CFrame.new(Random,-4000,Random)
+Brick.Size = Vector3.new(20000, 3, 20000)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Brick.CFrame + Vector3.new(0,10,0)
+
+--Keybinds
+local UIS = game:GetService("UserInputService")
+UIS.InputBegan:Connect(function(input, gameProcessedEvent)
+    if input.KeyCode == GrindKeybind then
+        Grind = not Grind
+    end
+end)
+UIS.InputBegan:Connect(function(input, gameProcessedEvent)
+    if (input.KeyCode == TPKeybinds[1] and UIS:IsKeyDown(TPKeybinds[2])) or (input.KeyCode == TPKeybinds[2] and UIS:IsKeyDown(TPKeybinds[1])) then
+	    game.StarterGui:SetCore("ChatMakeSystemMessage", {
+		    Text = "Teleporting..";
+		    Color = Color3.fromRGB(235,167,70);
+		    Font = Enum.Font.SourceSansBold;
+		    FontSize = Enum.FontSize.Size96;
+	    })
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game.Workspace:FindFirstChild(Target).HumanoidRootPart.CFrame * CFrame.new(-1,0,1)
+    end
+end)
+UIS.InputBegan:Connect(function(input, gameProcessedEvent)
+    if (input.KeyCode == ToBlockKeybind[1] and UIS:IsKeyDown(ToBlockKeybind[2])) or (input.KeyCode == ToBlockKeybind[2] and UIS:IsKeyDown(ToBlockKeybind[1])) then
+	    if BlockOrMap == true then
+	        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Brick.CFrame + Vector3.new(0,10,0)
+	    elseif BlockOrMap == false then
+	        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(2315.8291, 3399.48315, 105.117447, -0.394566834, -1.22560397e-08, 0.918866396, -4.66449279e-09, 1, 1.1335243e-08, -0.918866396, 1.86469562e-10, -0.394566834)
+	    end
+	    BlockOrMap = not BlockOrMap
+    end
+end)
+
+--GrindFunction
+local function CheckInv()
+    pcall(function()
+        if game.Players.LocalPlayer.Character then
+            for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                if game.Players.LocalPlayer.Character:FindFirstChildOfClass('Tool') then
+                    game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+                end
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = Brick.CFrame + Vector3.new(0,10,0)
+                v.Parent = game.Players.LocalPlayer.Character
+                wait()
+                 game:GetService("VirtualUser"):ClickButton1(Vector2.new(100,100))
+                game.Players.LocalPlayer.Character.Humanoid:UnequipTools()
+            end
+        end
+    end)
+end
+
+--Loop
+while game.RunService.RenderStepped:wait() do
+    pcall(function()
+        if game.StarterPlayer.StarterPlayerScripts:FindFirstChild('ClientEffects') then
+            game.StarterPlayer.StarterPlayerScripts.ClientEffects:Remove()
+        end
+        if game.Players.LocalPlayer.Character.Head:FindFirstChild('LevelBoard') then
+            game.Players.LocalPlayer.Character.Head.LevelBoard:Remove()
+        end
+        if Grind == true then
+            CheckInv()
+        end
+    end)
+end
+
