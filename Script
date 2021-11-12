@@ -1,12 +1,3 @@
---Settings
-Grind = false
-Random = math.random(-10000,10000)
-GrindKeybind = Enum.KeyCode.RightControl
-HideGuiKeybinds = {Enum.KeyCode.P, Enum.KeyCode.LeftControl}
-TPKeybinds = {Enum.KeyCode.M, Enum.KeyCode.LeftControl}
-ToBlockKeybind = {Enum.KeyCode.R, Enum.KeyCode.LeftControl}
-BlockOrMap = true --True means block False means map
-
 --StartMessage
 game.StarterGui:SetCore("ChatMakeSystemMessage", {
 Text = "Type /e TargetAll to Target All Players\nType /e UnTargetAll to UnTarget All Players\nCBring Doesn't Work With Some Abilities\nCtrl+P to Hide Gui\nRightCtrl To Toggle Grind\nCtrl+M To TP To Player In Name Bar\nCtrl+R To TP To Map Or Block";
